@@ -1,0 +1,8 @@
+## ⚙️ Quick Start
+1. Clone this repository: 
+   `git clone https://github.com/YOUR_USERNAME/windows-to-linux-rsync.git`
+2. Make the script executable: 
+   `chmod +x backup-windows.sh`
+3. Update the variables in the script to match your environment.
+4. Set up your Cron job: 
+   `(crontab -l ; echo "15 14 * * * /path/to/backup-windows.sh") | crontab -`
