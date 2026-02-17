@@ -1,7 +1,11 @@
-Windows-to-Linux Automated Rsync Bridge
+# Windows-to-Linux Automated Rsync Bridge
+
+Back Story:
+
+
 
 🚀 Overview
-aa
+
 A lightweight, robust solution for daily incremental backups from a Windows workstation to a Linux server. This setup bypasses the overhead of heavy backup software by leveraging the power of Rsync over SSH.
 
 🛠 Technology Stack
