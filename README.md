@@ -2,8 +2,13 @@
 
 #### Back Story: 
 ##### I want to learn ssh in deeper sense. That's why this solution came into picture. 
-##### I have encountered ssh before but only using it without understanding how it works.Let me share to you what I have learned.
+##### I have encountered ssh before but only using it without understanding how it really works. Let me share to you what I have learned.
 
+The standard syntax looks like this:
+*ssh username@remote_host_or_IP*
+
+Checking for the SSH Client: 
+*Open your terminal (Linux) or PowerShell (Windows) and type ssh -V*
 
 
 
