@@ -10,6 +10,18 @@ The standard syntax looks like this:
 Checking for the SSH Client: 
 *Open your terminal (Linux) or PowerShell (Windows) and type ssh -V*
 
+Verify that the server software is running on your Ubuntu machine:
+*sudo systemctl status ssh*
+
+Note: On Linux, the client (which lets you connect out) and the server (which lets others connect in) are often separate packages.
+
+Let's get that service set up so your Windows machine can find it. You'll need to run these commands in your Ubuntu terminal:
+
+Update your package list: *sudo apt update*
+
+Install the OpenSSH Server: *sudo apt install openssh-server*
+
+Reminder: Both machine has to be in the same subnet otherwise, in my case I use the port-forwarding which I will tell a story in the different repository.
 
 
 
