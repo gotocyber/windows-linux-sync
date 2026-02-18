@@ -23,6 +23,16 @@ Install the OpenSSH Server: *sudo apt install openssh-server*
 
 Reminder: Both machine has to be in the same subnet otherwise, in my case I use the port-forwarding which I will tell a story in the different repository.
 
+System Health Check: *top* (Note: You can press q at any time to exit the top screen and get back to your prompt.)
+
+Network Activity: The most common tool for a quick overview of active connections is *ss* (Socket Statistics)
+
+Checking Disk Space: *df -h*
+
+----------------I explore linux command before proceeding to ssh keys---------I can tell story on this later or other repository----
+
+
+
 
 
 🚀 Overview
