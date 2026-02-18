@@ -39,6 +39,23 @@ Checking Who Else is There: *who* or *w*
 
 SSH Hardening (The Config File): *The "brain" of your SSH service lives in a file called /etc/ssh/sshd_config. This is where you can change the port (to hide from bots) or disable password logins entirely once your keys are set up.*
 
+I have a Secret. I'm actually speaking and ask to gemini for guidance. Now that I spill the beans. Here's the question I ask that leads to the exciting part.
+
+##### GotoCyber: How can I ssh my windows from ubuntu?
+##### Gemini: This is a great "flip the script" moment! Usually, we use Windows to control Linux, but doing it the other way around is a classic move for managing a mixed-environment lab. By default, Windows is "closed" to incoming connections, while Linux comes with the tools to "speak" SSH out of the box. To make this work, we have to turn on the SSH Server on your Windows machine.
+
+##### Step 1: Turn on the SSH Server in Windows
+##### You don't need to download anything; it's a built-in "Optional Feature" in Windows 10 and 11.
+##### A. On your Windows machine, click Start and type "Optional Features".
+##### B. Look for "OpenSSH Server".
+##### ----If it’s not there: Click "View features" (or "Add a feature"), search for "OpenSSH Server," and install it.
+##### C. Now, we need to start the service. Open PowerShell as Administrator and run:
+Powershell: Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+
+------------------------------By the way, I got an error in here-------------------------------
+
+--------------THE SOLUTION-------------------
 
 
 
