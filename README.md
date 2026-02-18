@@ -82,8 +82,28 @@ Make it permanent: Set-Service -Name sshd -StartupType 'Automatic'"""
 #### INSTALL: *sudo apt install acpi*
 #### RUN: *acpi -b*
 
-_____TROUBLESHOOTING____
-####  systemctl status is showing *ssh Active:inactive(dead)* - SOLUTION: *sudo systemctl enable ssh*
+-------TROUBLESHOOTING-----
+####  systemctl status is showing *ssh Active:inactive(dead)* 
+#### SOLUTION: *sudo systemctl enable ssh*
+
+Another reminders: make the IP Static for your machine. I'm now talking to you! We will discuss it in another story.
+
+And this is where the slution begin. Did I say Solution? Yes! for A Backup Solution using rsync.
+
+----------------------------------------------------------------------------------------------------------------
+
+JUST Create a new user
+
+## Create the user
+net user labadmin Password123! /add
+
+## Make them an admin
+net localgroup administrators labadmin /add
+
+## Allow the password in SSH
+## Run this to open the config file in Notepad: *notepad C:\ProgramData\ssh\sshd_config*
+## Look for *PasswordAuthentication*. Make sure it says *yes* and does not have a *#* in front of it. Save and close, Then, *Restart-Service sshd*
+
 
 🚀 Overview
 
