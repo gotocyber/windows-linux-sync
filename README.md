@@ -31,6 +31,13 @@ Checking Disk Space: *df -h*
 
 ----------------I explore linux command before proceeding to ssh keys---------I can tell story on this later or other repository----
 
+##### Back to the "remote control" command! It’s the most important tool in your kit for managing that Ubuntu server from your Windows desk.
+
+The "Shortcut" (SSH Keys) - digital fingerprint
+
+Checking Who Else is There: *who* or *w*
+
+SSH Hardening (The Config File): *The "brain" of your SSH service lives in a file called /etc/ssh/sshd_config. This is where you can change the port (to hide from bots) or disable password logins entirely once your keys are set up.*
 
 
 
