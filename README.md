@@ -57,7 +57,33 @@ Set-Service -Name sshd -StartupType 'Automatic'
 
 --------------THE SOLUTION-------------------
 
+##### Check and install OpenSSH Server in Windows Machine
+##### CHECK: *Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH.Server*'
+##### INSTALL: *Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0*
+##### RUN: *Start-Service sshd Set-Service -Name sshd -StartupType 'Automatic'*
 
+"""One more "gotcha": The Firewall 🧱
+Windows is naturally protective. You might need to make sure the firewall is letting SSH through on Port 22. You can check this in PowerShell as well:
+
+Get-NetFirewallRule -Name *OpenSSH-Server* | select Name, DisplayName, Enabled
+
+If Enabled is False, run:
+Enable-NetFirewallRule -Name *OpenSSH-Server*"""
+
+"""The Next Steps
+As soon as that finishes, the sshd service will finally exist. You can then run the "Start" commands we tried earlier:
+
+Start it: Start-Service sshd
+
+Make it permanent: Set-Service -Name sshd -StartupType 'Automatic'"""
+
+------Oh but first, we must check the power status of our ubuntu----
+#### The Quick Way (acpi): 
+#### INSTALL: *sudo apt install acpi*
+#### RUN: *acpi -b*
+
+_____TROUBLESHOOTING____
+####  systemctl status is showing *ssh Active:inactive(dead)* - SOLUTION: *sudo systemctl enable ssh*
 
 🚀 Overview
 
