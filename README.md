@@ -211,8 +211,7 @@ Run it manually once to make sure the files fly across: Bash: *./backup_windows.
 Check your folder: ls ~/Documents/Windows_Backup
 
 Continuation ----RSYNC----
-
-
+#### I encouter this error
 🚀 Overview
 
 A lightweight, robust solution for daily incremental backups from a Windows workstation to a Linux server. This setup bypasses the overhead of heavy backup software by leveraging the power of Rsync over SSH.
