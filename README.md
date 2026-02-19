@@ -104,7 +104,7 @@ net localgroup administrators labadmin /add
 ### Run this to open the config file in Notepad: *notepad C:\ProgramData\ssh\sshd_config*
 ### Look for *PasswordAuthentication*. Make sure it says *yes* and does not have a *#* in front of it. Save and close, Then, *Restart-Service sshd*
 
--------------------I did some *scp* or copy test during this time and it works.---I will tell the story in another time-------AND HERE COME THE RSYNC-----
+-------------------I did some *scp* or copy test during this time and it works.---I will tell the story in another time-------AND HERE COMES THE RSYNC-----
 
 --------BUT BEFORE THAT WE NEED TO BE STEALTH-----
 #### We need to hide the created labadmin user, but HOW? we will make it as a "service" account - available for SSH and background tasks, but invisible on the login screen so it doesn't clutter up your Windows welcome page.
@@ -120,8 +120,97 @@ net localgroup administrators labadmin /add
 #### 7. Ensure the "Data" is set to 0 (this is the default).
 ## KABOOM
 
+--------Let's Go Back to RSYNC-----
+#### Compared to scp, rsync is smarter:
+#### 1. It only copies files that have changed (saving time).
+#### 2. It can automatically create the directory structure if you use certain flags.
+#### 3. If the internet cuts out halfway through, it can resume where it left off.
 
+BONUS: instead of *ssh labadmin@IP*, simplify to *ssh win*. Sounds good, right?
+Command: nano ~/.ssh/config
+NANO: 
 
+    Host win
+        HostName IP_Address
+        User labadmin
+        Port 22
+
+#### Ctr + O, Enter
+#### Ctr + X to exit
+
+Another Bonus: 
+## Step 1. Secret Handshake (SSH Keys) *Automation can't type a password*
+#### 1. On Ubuntu, generate the key (just hit Enter through all prompts):
+ssh-keygen -t ed25519
+#### 2. Copy it to Windows:
+ssh-copy-id win 
+(Since we set up your "win" alias, this should work! Type your password one last time.)
+#### 3. Test it: Type ssh win. If it lets you in without a password, you’re ready.
+## Step 2. Create the Backup Script: We’ll write a tiny script that tells Ubuntu exactly what to grab.
+#### 1. Create the file: nano ~/backup_windows.sh
+#### 2. Paste this in (adjust your folder paths as needed):
+
+    #!/bin/bash
+    # Syncing Windows Desktop to Ubuntu Backup folder
+    rsync -avz --delete win:"/C:/Users/labadmin/Desktop/" ~/Documents/Windows_Backup/
+#### 3. Save and Exit.
+#### 4. Make it executable: chmod +x ~/backup_windows.sh
+________Error Alert_____
+#### 1. Try this in Powershell as Administrator
+
+    # Create the .ssh folder if it doesn't exist
+    New-Item -ItemType Directory -Force -Path "C:\Users\labadmin\.ssh"
+
+    # Create the authorized_keys file
+    New-Item -ItemType File -Force -Path "C:\Users\labadmin\.ssh\authorized_keys"  
+#### 2. Put your Ubuntu Key inside the File: *On your Ubuntu ssh-keygen -t ed25519*
+Since we are on the Windows machine now, you'll need to paste your Ubuntu key into that new file.
+
+On Ubuntu, run: cat ~/.ssh/id_ed25519.pub
+
+Copy that long string of text that starts with ssh-ed25519.
+
+On Windows, run: notepad C:\Users\labadmin\.ssh\authorized_keys
+
+Paste the key, Save, and Close Notepad.
+#### Step 3: Apply the "Golden" Permissions
+#### Now that the file actually exists, these commands will work: Powershell
+    $path = "C:\Users\labadmin\.ssh\authorized_keys"
+    # Disable inheritance
+    icacls $path /inheritance:r
+    # Grant only the specific users needed
+    icacls $path /grant "labadmin:F"
+    icacls $path /grant "SYSTEM:F"
+    # Restart SSH to refresh everything
+    Restart-Service sshd
+#### Step 4: Final Test from Ubuntu
+#### Now, go back to your Ubuntu terminal and try: *ssh win*
+#### Does ssh win finally log you in without a password? If it does, your automated backup script is officially ready to run! *ANSWER SHOULD BE YEAH*
+#### Finally! That "Yeah" is the sound of success. If you are in without a password, the "bridge" between your two machines is officially permanent and secure.
+
+Now, let's put that bridge to work and get your Automated Backup running. Since the password barrier is gone, your script can now run silently in the background.
+
+    #!/bin/bash
+    # Create the backup directory if it doesn't exist
+    mkdir -p ~/Documents/Windows_Backup
+
+    # Sync files from Windows to Ubuntu
+    # -a: archive mode, -v: verbose, -z: compress, --delete: mirror perfectly
+    rsync -avz --delete win:"/C:/Users/labadmin/Desktop/" ~/Documents/Windows_Backup/
+
+    echo "Backup completed at $(date)"
+
+Save and exit (Ctrl+O, Enter, Ctrl+X).
+
+Make it executable: chmod +x ~/backup_windows.sh
+
+Test the Script
+
+Run it manually once to make sure the files fly across: Bash: *./backup_windows.sh*
+
+Check your folder: ls ~/Documents/Windows_Backup
+
+Continuation ----RSYNC----
 
 
 🚀 Overview
