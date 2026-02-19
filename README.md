@@ -62,7 +62,7 @@ Set-Service -Name sshd -StartupType 'Automatic'
 ##### INSTALL: *Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0*
 ##### RUN: *Start-Service sshd Set-Service -Name sshd -StartupType 'Automatic'*
 
-"""One more "gotcha": The Firewall 🧱
+"""One more "gotcha": The Firewall
 Windows is naturally protective. You might need to make sure the firewall is letting SSH through on Port 22. You can check this in PowerShell as well:
 
 Get-NetFirewallRule -Name *OpenSSH-Server* | select Name, DisplayName, Enabled
@@ -94,15 +94,34 @@ And this is where the slution begin. Did I say Solution? Yes! for A Backup Solut
 
 JUST Create a new user
 
-## Create the user
+### Create the user
 net user labadmin Password123! /add
 
-## Make them an admin
+### Make them an admin
 net localgroup administrators labadmin /add
 
-## Allow the password in SSH
-## Run this to open the config file in Notepad: *notepad C:\ProgramData\ssh\sshd_config*
-## Look for *PasswordAuthentication*. Make sure it says *yes* and does not have a *#* in front of it. Save and close, Then, *Restart-Service sshd*
+### Allow the password in SSH
+### Run this to open the config file in Notepad: *notepad C:\ProgramData\ssh\sshd_config*
+### Look for *PasswordAuthentication*. Make sure it says *yes* and does not have a *#* in front of it. Save and close, Then, *Restart-Service sshd*
+
+-------------------I did some *scp* or copy test during this time and it works.---I will tell the story in another time-------AND HERE COME THE RSYNC-----
+
+--------BUT BEFORE THAT WE NEED TO BE STEALTH-----
+#### We need to hide the created labadmin user, but HOW? we will make it as a "service" account - available for SSH and background tasks, but invisible on the login screen so it doesn't clutter up your Windows welcome page.
+
+#### *We can do this by modifying a specific key in the Windows Registry*
+#### 1. In Windows: CTRL+R then type regedit. Run as **Administrator**
+#### 2. Navigate to the following path (you can copy and paste this into the address bar at the top):
+*HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon*
+#### 3. Right-click the Winlogon folder (the "key") and select New > Key. Name this new key *SpecialAccounts*.
+#### 4. Right-click the SpecialAccounts key you just created and select *New > Key*. Name it UserList.
+#### 5. Now, inside UserList, right-click on the right-hand side white space and select New > DWORD (32-bit) Value.
+#### 6. Name this value exactly: labadmin.
+#### 7. Ensure the "Data" is set to 0 (this is the default).
+## KABOOM
+
+
+
 
 
 🚀 Overview
