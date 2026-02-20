@@ -53,9 +53,9 @@ I have a Secret. I'm actually speaking and ask to gemini for guidance. Now that 
 Powershell: Start-Service sshd
 Set-Service -Name sshd -StartupType 'Automatic'
 
-------------------------------By the way, I got an error in here-------------------------------
+---------By the way, I got an error in here-------------------------------
 
---------------THE SOLUTION-------------------
+---------THE SOLUTION-------------------
 
 ##### Check and install OpenSSH Server in Windows Machine
 ##### CHECK: *Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH.Server*'
@@ -104,7 +104,7 @@ net localgroup administrators labadmin /add
 ### Run this to open the config file in Notepad: *notepad C:\ProgramData\ssh\sshd_config*
 ### Look for *PasswordAuthentication*. Make sure it says *yes* and does not have a *#* in front of it. Save and close, Then, *Restart-Service sshd*
 
--------------------I did some *scp* or copy test during this time and it works.---I will tell the story in another time-------AND HERE COMES THE RSYNC-----
+--------I did some *scp* or copy test during this time and it works.---I will tell the story in another time-------AND HERE COMES THE RSYNC-----
 
 --------BUT BEFORE THAT WE NEED TO BE STEALTH-----
 #### We need to hide the created labadmin user, but HOW? we will make it as a "service" account - available for SSH and background tasks, but invisible on the login screen so it doesn't clutter up your Windows welcome page.
