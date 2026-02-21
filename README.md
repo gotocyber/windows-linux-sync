@@ -284,6 +284,55 @@ What did the dir /s /b C:\rsync.exe command return? (If it returned nothing, we 
 
 KABOOM--- it show this one "C:\msys64\usr\bin\rsync.exe"
 
+Then, this leads to scheduled backup
+
+Ubuntu: 
+
+    contrab -e
+
+then:
+
+    15 14 * * * /home/username/backup-windows.sh
+
+Important: The "Environment" Fix
+Cron runs in a very "bare-bones" environment. It doesn't always know where your SSH keys or the rsync command live. To make it bulletproof, add these two lines at the very top of your crontab file (above the schedule line):
+
+    SHELL=/bin/bash
+    PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+Save and Exit
+
+Press Ctrl + O then Enter to save.
+
+Press Ctrl + X to exit.
+
+You should see a message saying: crontab: installing new crontab.
+
+To double-check that Ubuntu "remembered" the task, type:
+
+    crontab -l
+
+Pro-Tip: How to check if it ran tomorrow morning
+
+Since you won't be awake at 2:00 AM to watch it, you can check the "evidence" when you log in tomorrow:
+
+Check the Log:
+
+    tail -n 20 ~/backup.log (Look for the 2:15 PM timestamp).
+
+Check the System Mail:
+
+If something went wrong, Cron usually sends a local "email" to your user. Type mail (if installed) or check /var/mail/siaadmin.
+
+You’re all set! Your Ubuntu machine is now a professional backup server.    
+
+One Last Safety Check (The SSH Agent)
+There is one common reason Cron fails even when the script is perfect: It can't find your SSH keys.
+
+If your backup doesn't start at 2:15, edit your backup-windows.sh one last time and add the identity file path directly to the rsync command. It makes the script "bulletproof":
+
+    # Update the rsync line in your script to include the -e flag
+    rsync -avz -e "ssh -i /home/username/.ssh/id_ed25519" --delete --rsync-path="$RSYNC_WIN_PATH" win:"/C/Users/labadmin/Desktop/" ~/Documents/Windows_Backup/Desktop/ >> $LOG_FILE 2>&1
 
 🚀 Overview
 
