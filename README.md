@@ -211,7 +211,80 @@ Run it manually once to make sure the files fly across: Bash: *./backup_windows.
 Check your folder: ls ~/Documents/Windows_Backup
 
 Continuation ----RSYNC----
-#### I encouter this error
+#### I encoutered some error
+
+#### The Fix: How to get Rsync on Windows
+Even though Ubuntu is doing the heavy lifting, rsync works best when both sides speak the same language. By default, Windows doesn't know what rsync is.
+#### The easiest way to fix this on Windows:
+
+Open PowerShell as Administrator.
+
+Install rsync using Winget (the Windows Package Manager): Powershell
+
+    winget install MSYS2.MSYS2
+
+Once MSYS2 is installed, you can add rsync, but that’s a bit of a journey.
+
+Wait, is Rsync even installed on Ubuntu?
+
+    Wait, is Rsync even installed on Ubuntu?
+
+IMPORTANT to find the location of the rsync in Windows.
+
+Run this in Ubuntu: ssh win "where rsync"
+
+If it says "Could not find file": Run this instead: *ssh win "dir /s /b C:\msys64\rsync.exe"*
+
+-------Actually I got back to SCP here but I persist to proceed with rsync---so here it comes---
+
+*The error "the system cannot find the path" happens because when Ubuntu logs into Windows via SSH, it doesn't "see" the same folders a human sees. We need to find the exact path where rsync.exe is hiding*
+
+Step 1: Find the actual location
+Run this command from your Ubuntu terminal. This tells Windows to search the whole C: drive for the file we just installed:
+        
+    ssh win "dir /s /b C:\rsync.exe"
+
+Step 2: Interpret the result
+If it shows: C:\msys64\usr\bin\rsync.exe
+
+If it shows: C:\Program Files\Git\usr\bin\rsync.exe
+
+If it shows nothing: Then the installation didn't finish.
+
+Step 3: Update the Script with the "Absolute" Path
+Once you have that path from Step 1, update your backup-windows.sh. We are going to use the Windows-style path with escaped backslashes (the \\ tells Linux "this is a real backslash").
+
+Edit your script to look like this:
+
+    #!/bin/bash
+    LOG_FILE="/home/user_name/backup.log"
+
+    # Use the EXACT path found in Step 1. 
+    # Note the DOUBLE backslashes for the script to understand them.
+    RSYNC_WIN_PATH="C:\\msys64\\usr\\bin\\rsync.exe"
+
+    echo "--- Rsync Attempt: $(date) ---" >> $LOG_FILE
+    
+    # Run the rsync
+    rsync -avz --delete --rsync-path="$RSYNC_WIN_PATH" win:"/C/Users/labadmin/Desktop/" ~/Documents/Windows_Backup/Desktop/ >> $LOG_FILE 2>&1
+
+    echo "--- Finished ---" >> $LOG_FILE  
+
+Why the previous attempt failed
+When you typed ssh win "/usr/bin/rsync", Windows tried to look for a folder named usr in the root of the hard drive (C:\usr\bin\rsync). But MSYS2 actually hides those folders inside C:\msys64\.
+
+Final Verification Test
+Before running the script again, run this specific test:
+
+    ssh win "C:\msys64\usr\bin\rsync.exe --version"
+
+If it says "rsync version 3.2.x", then your script will finally work.
+
+What did the dir /s /b C:\rsync.exe command return? (If it returned nothing, we might need to simply move the file to a place Windows can see it easily).   
+
+KABOOM--- it show this one "C:\msys64\usr\bin\rsync.exe"
+
+
 🚀 Overview
 
 A lightweight, robust solution for daily incremental backups from a Windows workstation to a Linux server. This setup bypasses the overhead of heavy backup software by leveraging the power of Rsync over SSH.
