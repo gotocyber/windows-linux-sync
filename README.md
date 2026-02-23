@@ -110,7 +110,7 @@ net localgroup administrators labadmin /add
 #### We need to hide the created labadmin user, but HOW? we will make it as a "service" account - available for SSH and background tasks, but invisible on the login screen so it doesn't clutter up your Windows welcome page.
 
 #### *We can do this by modifying a specific key in the Windows Registry*
-#### 1. In Windows: CTRL+R then type regedit. Run as **Administrator**
+#### 1. In Windows: Win+R then type regedit.
 #### 2. Navigate to the following path (you can copy and paste this into the address bar at the top):
 *HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon*
 #### 3. Right-click the Winlogon folder (the "key") and select New > Key. Name this new key *SpecialAccounts*.
